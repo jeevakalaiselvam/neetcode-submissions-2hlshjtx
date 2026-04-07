@@ -3,39 +3,28 @@ class Solution {
      * @param {number[]} nums
      * @return {number[]}
      */
-
-    swap(nums,i,j){
-        let tmp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = tmp;
-    }
-
-    partition(nums,low,high){
-        let pivot = nums[low];
-        let i = low - 1;
-        let j = high + 1;
-        while(true){
-            do{
-                i++
-            }while(nums[i] < pivot);
-            do{
-                j--;
-            }while(nums[j] > pivot);
-            if(i >= j) return j;
-            this.swap(nums,i,j)
-        }
-    }
-
-    quicksort(nums,low,high){
-        if(low < high){
-            let j = this.partition(nums,low,high);
-            this.quicksort(nums,low,j);
-            this.quicksort(nums,j+1,high);
-        }
-    }
-
+    
     sortArray(nums) {
-        this.quicksort(nums,0,nums.length - 1)
-        return nums;
+        if(nums.length <= 1) return nums;
+        let middle = Math.floor(nums.length / 2);
+        let left = this.sortArray(nums.slice(0,middle));
+        let right = this.sortArray(nums.slice(middle));
+        return this.merge(left,right);
+    }
+
+    merge(left,right){
+        let result = [];
+        let i = 0;
+        let j = 0;
+        while(i < left.length && j < right.length){
+            if(left[i] < right[j]){
+                result.push(left[i]);
+                i++;
+            }else{
+                result.push(right[j]);
+                j++;
+            }
+        }
+        return [...result,...left.slice(i),...right.slice(j)]
     }
 }
